@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 
 export const authController = {
-   async signup(req: Request, res: Response) {
+   signup: async (req: Request, res: Response) => {
       try {
          const { username, password, confirmPassword, fullname, gender } =
             req.body;
@@ -58,8 +58,14 @@ export const authController = {
          res.status(500).json({ error: "Internal server error" });
       }
    },
-   async login(req: Request, res: Response) {
+   login: async (req: Request, res: Response) => {
       try {
+         const isLogin = req.user.id;
+
+         if (isLogin) {
+            return res.status(200).json({ message: "Sudah login" });
+         }
+
          const { username, password } = req.body;
          if (!username || !password) {
             return res
@@ -67,12 +73,15 @@ export const authController = {
                .json({ error: "Tolong isi username dan password" });
          }
          const user = await db.user.findUnique({ where: { username } });
+
          if (!user) {
             return res
                .status(401)
                .json({ error: "Username atau password salah" });
          }
+
          const isPasswordValid = await bcrypt.compare(password, user.password);
+
          if (!isPasswordValid) {
             return res
                .status(401)

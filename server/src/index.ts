@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js";
+import messageRouter from "./routes/message.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/messages", messageRouter);
 
 app.get("*", (_, res) => {
    res.status(404).send("Not Found");
@@ -23,3 +25,6 @@ app.get("*", (_, res) => {
 app.listen(PORT, () => {
    console.log(`Server is running on port ${PORT}`);
 });
+
+//todo : Add web socket
+//todo : configure for deployment

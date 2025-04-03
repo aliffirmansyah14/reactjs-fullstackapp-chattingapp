@@ -17,9 +17,9 @@ model User{
   profilePicture String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  conversationId String[]
+  conversationId String[] 
 
-  Conversations Conversation[]
+  conversations Conversation[]
   messages Message[]
 }
 
@@ -29,7 +29,7 @@ model Conversation {
   updatedAt DateTime @updatedAt
   
   participantsId String[]
-  Participants User[]
+  participants User[] 
 
   messagesId String[]
   messages Message[]
