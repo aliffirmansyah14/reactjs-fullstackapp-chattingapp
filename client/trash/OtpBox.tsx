@@ -37,7 +37,7 @@ export default function OtpBox() {
    };
    return (
       <div className="flex justify-center items-center">
-         {new Array(4).fill(null).map((_, index) => {
+         {[...new Array(4).keys()].map((_, index) => {
             return (
                <Box
                   key={index}

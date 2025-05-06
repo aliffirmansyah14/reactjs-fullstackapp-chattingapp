@@ -4,17 +4,13 @@ import protectedRoute from "../middleware/protectedRoute.js";
 
 const authRouter = express.Router();
 
-authRouter.post(
-   "/login",
-   protectedRoute as RequestHandler,
-   authController.login as RequestHandler
-);
+authRouter.post("/login", authController.login as RequestHandler);
 authRouter.post("/logout", authController.logout as RequestHandler);
 authRouter.post("/signup", authController.signup as RequestHandler);
 authRouter.get(
-   "/me",
-   protectedRoute as RequestHandler,
-   authController.getMe as RequestHandler
+	"/me",
+	protectedRoute as RequestHandler,
+	authController.getMe as RequestHandler
 );
 
 export default authRouter;

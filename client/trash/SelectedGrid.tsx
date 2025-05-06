@@ -14,6 +14,7 @@ export default function SelectedGrid({
 
    const handleMouseUp = () => {
       setIsMouseDown(false);
+      console.log("mouse up");
    };
 
    const handleMouseEnter = useCallback(
@@ -22,8 +23,8 @@ export default function SelectedGrid({
             const startBox = selectedBoxes[0];
             const endBox = boxNumber;
 
-            const startRow = Math.floor(startBox / cols); // 40  / 15 = 2.xxx (2)
-            const startColumn = startBox % cols; // 36 % 10 = 4
+            const startRow = Math.floor(startBox / cols); // 40  / 10 = 4 (4)
+            const startColumn = startBox % cols; // 36 % 10 = 6
             const endRow = Math.floor(endBox / cols);
             const endColumn = endBox % cols;
 
@@ -35,6 +36,8 @@ export default function SelectedGrid({
             //    start: [minStartColumn, minStartRow],
             //    end: [maxEndColumn, maxEndRow],
             // });
+
+            console.log(boxNumber);
 
             const selectedBox = [];
             for (let col = minStartColumn; col <= maxEndColumn; col++) {
@@ -68,13 +71,13 @@ export default function SelectedGrid({
             return (
                <div
                   key={index}
-                  className="flex justify-center items-center border border-black p-2"
+                  className="flex justify-center items-center border border-accent "
                   onMouseEnter={() => handleMouseEnter(index)}
                   onMouseDown={() => handleMouseDown(index)}
                   style={{
                      backgroundColor: selectedBoxes.includes(index)
-                        ? "blue"
-                        : "white",
+                        ? "var(--color-accent)"
+                        : "transparent",
                   }}
                >
                   {index + 1}
