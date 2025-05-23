@@ -5,6 +5,7 @@ import {
 	PropsWithChildren,
 	useState,
 	useEffect,
+	use,
 } from "react";
 import { axiosInstance } from "../lib/axios";
 
@@ -26,14 +27,21 @@ const AuthContext = createContext<{
 	isLoading: true,
 });
 
+const useAuth = () => {
+	return use(AuthContext);
+};
+
 const AuthProvider = ({ children }: PropsWithChildren) => {
 	const [authUser, setAuthUser] = useState<AuthUserType | null>(null);
 	const [isLoading, setIsloading] = useState<boolean>(true);
 
 	useEffect(() => {
+		const controller = new AbortController();
+		const signal = controller.signal;
 		const fetchUser = async () => {
 			try {
-				const response = await axiosInstance.get("/auth/me");
+				await new Promise(resolve => setTimeout(resolve, 2000));
+				const response = await axiosInstance.get("/api/auth/me", { signal });
 				if (response.status !== 200) {
 					throw new Error(response.data.error);
 				}
@@ -45,6 +53,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 			}
 		};
 		fetchUser();
+		return () => controller.abort();
 	}, []);
 
 	return (
@@ -54,4 +63,4 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 	);
 };
 
-export { AuthContext, AuthProvider };
+export { AuthContext, AuthProvider, useAuth };

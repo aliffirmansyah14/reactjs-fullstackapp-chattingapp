@@ -1,22 +1,22 @@
 import { use, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { axiosInstance } from "../lib/axios";
-import { FormLogin } from "../components/auth/FormLogin";
-import toast from "react-hot-toast";
+import { FormLoginType } from "../lib/validation";
+import { toastError, toastSuccess } from "../lib/toast";
+import { userLogin } from "../lib/api/userApi";
 
-export default function useLogin() {
+export function useLogin() {
 	const [isLoading, setIsloading] = useState<boolean>(false);
 	const { setAuthUser } = use(AuthContext);
 
-	const login = async (payload: FormLogin) => {
+	const login = async (payload: FormLoginType) => {
 		try {
 			setIsloading(true);
-			const response = await axiosInstance.post("/api/auth/login", payload);
+			const response = await userLogin(payload);
 			if (response.status !== 200) throw new Error(response.data.error);
-			toast.success("Login berhasil");
 			setAuthUser(response.data);
+			toastSuccess("Login Berhasil");
 		} catch (error: any) {
-			toast.error(error.response.data.error);
+			toastError(error.response.data.error || "Terjadi kesalahan di server");
 		} finally {
 			setIsloading(false);
 		}

@@ -1,48 +1,23 @@
 import { Link } from "react-router-dom";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Input, { InputMessage } from "../Input";
+import Input from "../input";
 import { PasswordIcon, UsernameIcon } from "../../assets/svg";
-import RadioButton from "../RadioButton";
-import useSignup from "../../hooks/useSignup";
 
-const formSchema = z
-	.object({
-		username: z.string().min(3, "Minimal 3 character"),
-		fullname: z.string().min(1, "Minimal 1 character"),
-		password: z
-			.string()
-			.min(8, "Password harus lebih dari 8 karakter")
-			.regex(
-				/(?=.*?[a-z])(?=.*?[0-9]).{8,}$/,
-				"At least one number one letter"
-			),
-		confirmPassword: z
-			.string()
-			.min(8, "Password harus lebih dari 8 karakter")
-			.regex(
-				/(?=.*?[a-z])(?=.*?[0-9]).{8,}$/,
-				"At least one number one letter"
-			),
-		gender: z.enum(["male", "female"]),
-	})
-	.refine(data => data.password === data.confirmPassword, {
-		message: "Password tidak sama",
-		path: ["confirmPassword"],
-	});
-export type FormSignUp = z.infer<typeof formSchema>;
+import useSignup from "../../hooks/useSignup";
+import { FormSignUpType, formSignUpSchema } from "../../lib/validation";
+import RadioButton from "../radio-button";
 
 export default function FormSignup() {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<FormSignUp>({
-		resolver: zodResolver(formSchema),
+	} = useForm<FormSignUpType>({
+		resolver: zodResolver(formSignUpSchema),
 	});
 	const { isLoading, signup } = useSignup();
-	const onSubmit = (data: FormSignUp) => {
+	const onSubmit = (data: FormSignUpType) => {
 		console.log(data);
 		signup(data);
 	};
@@ -56,11 +31,14 @@ export default function FormSignup() {
 				type="text"
 				required={true}
 				icon={<UsernameIcon />}
+				autoComplete="username"
 				className={
 					errors.username?.message ? "border-red-500 outline-red-500" : ""
 				}
 			>
-				{errors.username && <InputMessage message={errors.username.message} />}
+				{errors.username && (
+					<Input.InputMessage message={errors.username.message} />
+				)}
 			</Input>
 			<Input
 				{...register("fullname")}
@@ -69,11 +47,14 @@ export default function FormSignup() {
 				type="text"
 				required={true}
 				icon={<UsernameIcon />}
+				autoComplete="fullname"
 				className={
 					errors.fullname?.message ? "border-red-500 outline-red-500" : ""
 				}
 			>
-				{errors.fullname && <InputMessage message={errors.fullname.message} />}
+				{errors.fullname && (
+					<Input.InputMessage message={errors.fullname.message} />
+				)}
 			</Input>
 			<Input
 				{...register("password")}
@@ -83,22 +64,26 @@ export default function FormSignup() {
 				required={true}
 				minLength={8}
 				icon={<PasswordIcon />}
+				autoComplete="off"
 				className={errors.password?.message ? "border-red-500 " : ""}
 			>
-				{errors?.password && <InputMessage message={errors.password.message} />}
+				{errors?.password && (
+					<Input.InputMessage message={errors.password.message} />
+				)}
 			</Input>
 			<Input
 				{...register("confirmPassword")}
 				name="confirmPassword"
 				placeholder="password"
 				type="password"
+				autoComplete="off"
 				required={true}
 				minLength={8}
 				icon={<PasswordIcon />}
 				className={errors.confirmPassword?.message ? "border-red-500 " : ""}
 			>
 				{errors?.confirmPassword && (
-					<InputMessage message={errors.confirmPassword.message} />
+					<Input.InputMessage message={errors.confirmPassword.message} />
 				)}
 			</Input>
 			<div className="flex gap-2">
@@ -129,7 +114,7 @@ export default function FormSignup() {
 					role="button"
 					className="btn btn-accent w-full mt-2"
 				>
-					Submit
+					{isLoading ? "Loading..." : "Submit"}
 				</button>
 			</div>
 		</form>

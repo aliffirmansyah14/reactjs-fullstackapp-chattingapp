@@ -1,15 +1,10 @@
 import { useForm } from "react-hook-form";
-import Input, { InputMessage } from "../Input";
+import Input from "../input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
 import { PasswordIcon, UsernameIcon } from "../../assets/svg";
-import useLogin from "../../hooks/useLogin";
 
-const formSchema = z.object({
-	username: z.string().min(2, "Minimal 2 karakter"),
-	password: z.string().min(1, "Password harus lebih dari 8 karakter"),
-});
-export type FormLogin = z.infer<typeof formSchema>;
+import { FormLoginType, formLoginSchema } from "../../lib/validation";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function FormLogin() {
 	const { isLoading, login } = useLogin();
@@ -17,11 +12,11 @@ export default function FormLogin() {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<FormLogin>({
-		resolver: zodResolver(formSchema),
+	} = useForm<FormLoginType>({
+		resolver: zodResolver(formLoginSchema),
 	});
 
-	const onSubmit = (data: FormLogin) => {
+	const onSubmit = (data: FormLoginType) => {
 		login(data);
 	};
 	return (
@@ -29,7 +24,8 @@ export default function FormLogin() {
 			<Input
 				{...register("username")}
 				name="username"
-				placeholder="joe mama"
+				placeholder="username"
+				autoComplete="username"
 				type="text"
 				required={true}
 				icon={<UsernameIcon />}
@@ -37,7 +33,9 @@ export default function FormLogin() {
 					errors.username?.message ? "border-red-500 outline-red-500" : ""
 				}
 			>
-				{errors.username && <InputMessage message={errors.username.message} />}
+				{errors.username && (
+					<Input.InputMessage message={errors.username.message} />
+				)}
 			</Input>
 			<Input
 				{...register("password")}
@@ -46,10 +44,13 @@ export default function FormLogin() {
 				type="password"
 				required={true}
 				minLength={1}
+				autoComplete="user1234"
 				icon={<PasswordIcon />}
 				className={errors.password?.message ? "border-red-500 " : ""}
 			>
-				{errors?.password && <InputMessage message={errors.password.message} />}
+				{errors?.password && (
+					<Input.InputMessage message={errors.password.message} />
+				)}
 			</Input>
 
 			<button disabled={isLoading} className="btn btn-accent w-full mt-4">

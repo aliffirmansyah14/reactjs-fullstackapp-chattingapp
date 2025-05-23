@@ -1,4 +1,3 @@
-export type conversation = (typeof DUMMY_CONVERSATIONS)[0];
 export type message = (typeof DUMMY_MESSAGES)[0];
 
 export const DUMMY_CONVERSATIONS = [

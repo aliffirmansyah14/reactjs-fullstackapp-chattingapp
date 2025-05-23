@@ -1,4 +1,26 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-   themes: light --default, dark --prefersdark, black;
+	themes: light --default, dark --prefersdark, black;
+}
+
+@theme {
+	--animate-fade-in: fadeIn 0.25s ease-in;
+	--animate-rotate: rotate 1s linear infinite;
+
+	@keyframes rotate {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 }

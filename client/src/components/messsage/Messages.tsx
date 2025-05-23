@@ -1,21 +1,37 @@
-import CurrentHour from "./CurrentHour";
-import ListMessage from "./ListMessage";
-import MessageInput from "./MessageInput";
+import useConversation from "../../store/conversation";
+import CurrentHour from "./current-hour";
+import MessagesContainer from "./messages-container";
+import NotSelectedMessage from "./not-selected-message";
 
 export default function Messages({ className }: { className?: string }) {
+	const { selectedConversation } = useConversation();
+
 	return (
 		<main className={`${className} p-2`}>
-			<div className="flex flex-col gap-1 h-full p-2">
-				<div className="px-4 py-2 mb-2 border-b border-accent">
-					<span className="label">To:</span>
-					<span className="font-bold ms-1">John doe</span>
-					<CurrentHour className="ms-1 inline-block" />
+			{!selectedConversation ? (
+				<NotSelectedMessage />
+			) : (
+				<div className="flex flex-col gap-1 h-full p-2">
+					<Header />
+					<MessagesContainer />
 				</div>
-				<div className="flex-1 overflow-auto">
-					<ListMessage />
-				</div>
-				<MessageInput />
-			</div>
+			)}
 		</main>
+	);
+}
+function Header() {
+	const { selectedConversation } = useConversation();
+
+	return (
+		<div className="px-4 py-2 mb-2 border-b border-accent">
+			<div className="flex items-center gap-1">
+				<span className="label">To:</span>
+				<span className="font-bold capitalize">
+					{selectedConversation?.fullname}
+				</span>
+
+				<CurrentHour className="ms-auto inline-block" />
+			</div>
+		</div>
 	);
 }

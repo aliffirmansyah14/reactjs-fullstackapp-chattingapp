@@ -20,7 +20,7 @@ export default function Input({ className, icon, children, ...props }: Input) {
 	);
 }
 
-export function InputMessage({
+Input.InputMessage = function InputMessage({
 	message,
 }: {
 	message: string | string[] | undefined;
@@ -37,4 +37,4 @@ export function InputMessage({
 				  ))}
 		</div>
 	);
-}
+};

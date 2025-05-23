@@ -41,7 +41,7 @@ export const authController = {
 			});
 
 			if (newUser) {
-				const token = generateToken(username, res);
+				const token = generateToken(newUser.id, res);
 
 				return res.status(201).json({
 					username: newUser.username,
@@ -84,7 +84,7 @@ export const authController = {
 			if (!isPasswordValid) {
 				return res.status(401).json({ error: "Username atau password salah" });
 			}
-			const token = generateToken(username, res);
+			const token = generateToken(user.id, res);
 
 			return res.status(200).json({
 				username: user.username,
@@ -114,6 +114,7 @@ export const authController = {
 				return res.status(404).json({ error: "User not found" });
 			}
 			return res.json({
+				id: user.id,
 				username: user.username,
 				fullname: user.fullname,
 				profilePicture: user.profilePicture,
