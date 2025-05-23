@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import Listconversations from "./list-conversations";
 import LogoutButton from "./button-logout";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useDebounceValue } from "../../hooks/useDebounceValue";
 
 interface ISideBar {
